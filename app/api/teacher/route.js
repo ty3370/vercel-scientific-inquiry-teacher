@@ -1,5 +1,7 @@
-import { sql } from '@vercel/postgres';
+import { neon } from '@neondatabase/serverless';
 import { NextResponse } from 'next/server';
+
+const sql = neon(process.env.DATABASE_URL);
 
 export const dynamic = 'force-dynamic';
 
