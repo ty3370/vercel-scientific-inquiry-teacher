@@ -1,8 +1,6 @@
 import { sql } from '@vercel/postgres';
 import { NextResponse } from 'next/server';
 
-const sql = neon(process.env.DATABASE_URL);
-
 export const dynamic = 'force-dynamic';
 
 function isAuthenticated(req) {
