@@ -1,4 +1,4 @@
-import { neon } from '@neondatabase/serverless';
+import { sql } from '@vercel/postgres';
 import { NextResponse } from 'next/server';
 
 const sql = neon(process.env.DATABASE_URL);
