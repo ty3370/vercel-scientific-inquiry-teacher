@@ -4,9 +4,10 @@ import { useEffect, useMemo, useState } from 'react';
 
 const STEP_LABELS = {
   1: '로그인',
-  2: '1차 설계',
+  2: '주제 선정',
   3: 'AI 대화',
   4: '2차 설계',
+  5: '1차 설계',
 };
 
 function formatDate(value) {
@@ -18,6 +19,10 @@ function formatDate(value) {
 
 function getChat(student) {
   return Array.isArray(student?.chat_messages) ? student.chat_messages : [];
+}
+
+function getTopicChat(student) {
+  return Array.isArray(student?.topic_messages) ? student.topic_messages : [];
 }
 
 function getChecklist(student) {
@@ -259,6 +264,7 @@ export default function TeacherPage() {
   }
 
   const chat = getChat(selectedStudent);
+  const topicChat = getTopicChat(selectedStudent);
   const checklist = getChecklist(selectedStudent);
 
   return (
@@ -442,6 +448,60 @@ export default function TeacherPage() {
                     {selectedStudent.total_score ?? '-'} / 15
                   </div>
                 </div>
+              </section>
+
+              <section style={styles.card}>
+                <h3 style={styles.cardTitle}>
+                  🔎 탐구 주제 선정
+                </h3>
+
+                <div style={styles.fieldLabel}>
+                  학생이 정한 탐구 주제
+                </div>
+
+                <div style={styles.textBox}>
+                  {selectedStudent.inquiry_topic ||
+                    '아직 결정한 탐구 주제가 없습니다.'}
+                </div>
+
+                <div style={styles.fieldLabel}>
+                  탐구 주제 선정 AI 대화 기록
+                </div>
+
+                {topicChat.length === 0 ? (
+                  <div style={styles.empty}>
+                    주제 선정 대화 기록이 없습니다.
+                  </div>
+                ) : (
+                  <div style={styles.chatBox}>
+                    {topicChat.map((item, index) => (
+                      <div
+                        key={`${index}-${item.role}`}
+                        style={
+                          item.role === 'user'
+                            ? styles.chatUser
+                            : styles.chatAssistant
+                        }
+                      >
+                        <div style={styles.chatRole}>
+                          {item.role === 'user'
+                            ? selectedStudent.name
+                            : '🤖 과학탐구 도우미'}
+                        </div>
+
+                        <div style={styles.chatContent}>
+                          {item.content}
+                        </div>
+
+                        {item.timestamp && (
+                          <div style={styles.chatTime}>
+                            {item.timestamp}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
               </section>
 
               <section style={styles.card}>
